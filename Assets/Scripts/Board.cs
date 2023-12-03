@@ -40,6 +40,10 @@ public class Board : MonoBehaviour
         {
             return getRevealed(card);
         }
+        else if (card.matched)
+        {
+            return null;
+        }
         else
         {
             return tileBack;

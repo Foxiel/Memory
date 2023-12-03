@@ -6,6 +6,7 @@ public class Card
     public Type type;
     public int front;
     public bool revealed;
+    public bool matched;
 
     public enum Type
     {
