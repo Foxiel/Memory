@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,9 +9,13 @@ public class Controller : MonoBehaviour
 {
     private Board board;
     private Card[,] state;
+    private Card card1;
+    private Card card2;
+    
     
     private int width = 4;
     private int height = 4;
+    private int selected;
 
     private void Awake()
     {
@@ -34,38 +39,42 @@ public class Controller : MonoBehaviour
 
     private void GenerateCards()
     {
+        List<Card> cards = new List<Card>();
+        for (int i = 0; i < width * height / 2; i++)
+        {
+            cards.Add(new Card { type = Card.Type.Front, front = i + 1 });
+            cards.Add(new Card { type = Card.Type.Front, front = i + 1 });
+        }
+        
+        for (int i = 0; i < cards.Count; i++)
+        {
+            int j = Random.Range(i, cards.Count);
+            (cards[i], cards[j]) = (cards[j], cards[i]);
+        }
+        
+        int index = 0;
         for (int x = 0; x < width; x++)
         {
-            for (int y =0; y < height; y++)
+            for (int y = 0; y < height; y++, index++)
             {
-                for (int i = 0; i < 2; i++)
-                {
-                    Card card = new Card();
-                    card.position = new Vector3Int(x, y, 0);
-                    card.type = Card.Type.Front;
-                    card.front = Random.Range(1, 9);
-                    card.revealed = false;
-                    card.matched = false;
-                    
-                    if (state[x, y] == null)
-                    {
-                        state[x, y] = card;
-                    }
-                    else
-                    {
-                        // if the card already exists, generate a new card
-                        i--;
-                    }
-                }
+                state[x, y] = cards[index];
+                state[x, y].position = new Vector3Int(x, y, 0);
             }
         }
     }
     
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (selected < 2)
         {
-            Reveal();
+            if (Input.GetMouseButtonDown(0))
+            {
+                Reveal();
+            }
+        }
+        else if (selected == 2)
+        {
+            StartCoroutine(CheckMatch(1));
         }
     }
     
@@ -82,6 +91,15 @@ public class Controller : MonoBehaviour
         }
         
         card.revealed = true;
+        selected++;
+        if (selected == 1)
+        {
+            card1 = card;
+        }
+        else if (selected == 2)
+        {
+            card2 = card;
+        }
         board.Draw(state);
     }
     
@@ -101,4 +119,31 @@ public class Controller : MonoBehaviour
     {
         return x >= 0 && x < width && y >= 0 && y < height;
     }
+
+    private IEnumerator CheckMatch(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (card1 == null || card2 == null)
+        {
+            yield break;
+        }
+        
+        if (card1.front == card2.front)
+        {
+            card1.matched = true;
+            card2.matched = true;
+        }
+        else
+        {
+            card1.revealed = false;
+            card2.revealed = false;
+        }
+        
+        card1 = null;
+        card2 = null;
+        selected = 0;
+        board.Draw(state);
+    }
+
+    
 }
