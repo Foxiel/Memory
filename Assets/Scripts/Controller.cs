@@ -38,14 +38,67 @@ public class Controller : MonoBehaviour
         {
             for (int y =0; y < height; y++)
             {
-                Card card = new Card();
-                card.position = new Vector3Int(x, y, 0);
-                card.type = Card.Type.Front;
-                card.front = Random.Range(1, 9);
-                card.revealed = false;
-                card.matched = false;
-                state[x, y] = card;
+                for (int i = 0; i < 2; i++)
+                {
+                    Card card = new Card();
+                    card.position = new Vector3Int(x, y, 0);
+                    card.type = Card.Type.Front;
+                    card.front = Random.Range(1, 9);
+                    card.revealed = false;
+                    card.matched = false;
+                    
+                    if (state[x, y] == null)
+                    {
+                        state[x, y] = card;
+                    }
+                    else
+                    {
+                        // if the card already exists, generate a new card
+                        i--;
+                    }
+                }
             }
         }
+    }
+    
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Reveal();
+        }
+    }
+    
+    private void Reveal()
+    {
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3Int cardPosition = board.tilemap.WorldToCell(worldPosition);
+
+        Card card = GetCard(cardPosition.x, cardPosition.y);
+        
+        if (card.type == Card.Type.Invalid || card.revealed || card.matched)
+        {
+            return;
+        }
+        
+        card.revealed = true;
+        board.Draw(state);
+    }
+    
+    private Card GetCard(int x, int y)
+    {
+        if (IsValid(x, y))
+        {
+            return state[x, y];
+        }
+        else
+        {
+            return new Card();
+        }
+    }
+    
+    private bool IsValid(int x, int y)
+    {
+        return x >= 0 && x < width && y >= 0 && y < height;
     }
 }

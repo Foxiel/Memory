@@ -407,14 +407,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileBack: {fileID: 11400000, guid: ab46b3c39caf142489175ccaf19e4def, type: 2}
-  tileNum1: {fileID: 0}
-  tileNum2: {fileID: 0}
-  tileNum3: {fileID: 0}
-  tileNum4: {fileID: 0}
-  tileNum5: {fileID: 0}
-  tileNum6: {fileID: 0}
-  tileNum7: {fileID: 0}
-  tileNum8: {fileID: 0}
+  tileNum1: {fileID: 11400000, guid: baf9e4218ee8cf34aab0514cf15e22f5, type: 2}
+  tileNum2: {fileID: 11400000, guid: ee78a907246f59a4d942652bfaf30a4c, type: 2}
+  tileNum3: {fileID: 11400000, guid: b808657632bec8f49a5078083f74dc95, type: 2}
+  tileNum4: {fileID: 11400000, guid: eb38156dea4f54c4eb4de8835013cabf, type: 2}
+  tileNum5: {fileID: 11400000, guid: 4531058ffda3448438f471f29e950514, type: 2}
+  tileNum6: {fileID: 11400000, guid: 8247b97b2ce3b5243ab9163c55580f1a, type: 2}
+  tileNum7: {fileID: 11400000, guid: 24e8318560103e14e959a315e5220756, type: 2}
+  tileNum8: {fileID: 11400000, guid: 8866d189c993e274ba1a5f52764fed8c, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
